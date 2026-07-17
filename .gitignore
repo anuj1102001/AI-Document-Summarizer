@@ -1,0 +1,21 @@
+# Virtual Environment
+.venv/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Uploaded PDFs
+app/uploads/
+
+# Windows
+desktop.ini
+
+# VS Code
+.vscode/
+
+# Ignore all PDFs
+*.pdf

@@ -33,4 +33,30 @@ AI-powered document summarization API built using FastAPI and Google's Gemini AP
 
 ## Installation
 
-...
+```bash
+git clone https://github.com/anuj1102001/AI-Document-Summarizer.git
+
+cd AI-Document-Summarizer
+
+python -m venv .venv
+
+source .venv/bin/activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env`
+
+```text
+GEMINI_API_KEY=YOUR_API_KEY
+```
+
+Run
+
+```bash
+uvicorn app.main:app --reload
+```

@@ -2,6 +2,8 @@
 
 Run on 2026-10-21 · embedder `hashing-512` · chunks of 1100 chars with 160 overlap · 47 answerable questions over 4 synthetic documents (15 pages, 47 chunks).
 
+**Caveat:** the documents and questions were written by the same person who built the retrieval pipeline, and the corpus is small (a document-scoped search picks from about a dozen passages). Treat this as a regression suite and a comparison between modes, not as accuracy on real-world documents.
+
 A question counts as a hit at k if one of the top-k passages covers the page that holds the answer. MRR is the mean reciprocal rank of the first correct passage (0 if not in the top 6).
 
 ## Scoped to the question's document (how Ask works)
@@ -9,8 +11,8 @@ A question counts as a hit at k if one of the top-k passages covers the page tha
 | Mode | hit@1 | hit@3 | hit@6 | mrr@6 | exact_hit@3 | paraphrase_hit@3 | p50_ms |
 |---|---|---|---|---|---|---|---|
 | dense | 0.596 | 0.809 | 0.957 | 0.728 | 0.8 | 0.812 | 0.04 |
-| sparse | 0.681 | 0.872 | 0.936 | 0.787 | 1.0 | 0.812 | 0.39 |
-| hybrid | 0.617 | 0.894 | 1.0 | 0.768 | 1.0 | 0.844 | 0.43 |
+| sparse | 0.681 | 0.872 | 0.936 | 0.787 | 1.0 | 0.812 | 0.33 |
+| hybrid | 0.617 | 0.894 | 1.0 | 0.768 | 1.0 | 0.844 | 0.45 |
 
 ## Across the whole library (four documents compete)
 
@@ -18,7 +20,7 @@ A question counts as a hit at k if one of the top-k passages covers the page tha
 |---|---|---|---|---|---|---|---|
 | dense | 0.362 | 0.574 | 0.702 | 0.474 | 0.733 | 0.5 | 0.06 |
 | sparse | 0.596 | 0.745 | 0.872 | 0.695 | 0.867 | 0.688 | 1.16 |
-| hybrid | 0.489 | 0.723 | 0.894 | 0.632 | 0.8 | 0.688 | 1.32 |
+| hybrid | 0.489 | 0.723 | 0.894 | 0.632 | 0.8 | 0.688 | 1.26 |
 
 ## Ablation: how much should BM25's ranking count? (library scope)
 

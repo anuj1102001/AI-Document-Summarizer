@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 import pymupdf
 
 from app.errors import AppError
+from app.ingest.columns import column_text, find_gutter
 
 # A page with less text than this is treated as empty (blank, image-only or scanned).
 MIN_PAGE_CHARS = 25
@@ -82,7 +83,8 @@ def parse_pdf(data: bytes, max_pages: int) -> ParsedDocument:
             raise AppError(f"This PDF has {doc.page_count} pages; the limit is {max_pages}.", 413, "TOO_MANY_PAGES")
         pages, empty = [], []
         for i, page in enumerate(doc, start=1):
-            text = clean_text(page.get_text("text", sort=True))
+            gutter = find_gutter(page)  # two-column papers and reports are read column by column
+            text = clean_text(column_text(page, gutter) if gutter else page.get_text("text", sort=True))
             if len(text) < MIN_PAGE_CHARS:
                 empty.append(i)
             pages.append(Page(i, text, page.rect.width, page.rect.height))

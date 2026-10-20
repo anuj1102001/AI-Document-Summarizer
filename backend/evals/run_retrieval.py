@@ -75,6 +75,10 @@ def to_markdown(meta: dict, results: dict) -> str:
         f"Run on {meta['date']} · embedder `{meta['embedder']}` · chunks of {meta['chunk_chars']} chars with {meta['overlap']} overlap · "
         f"{meta['questions']} answerable questions over {meta['documents']} synthetic documents ({meta['pages']} pages, {meta['chunks']} chunks).",
         "",
+        "**Caveat:** the documents and questions were written by the same person who built the retrieval pipeline, and the corpus is small "
+        "(a document-scoped search picks from about a dozen passages). Treat this as a regression suite and a comparison between modes, "
+        "not as accuracy on real-world documents.",
+        "",
         "A question counts as a hit at k if one of the top-k passages covers the page that holds the answer. "
         "MRR is the mean reciprocal rank of the first correct passage (0 if not in the top 6).",
         "",

@@ -106,3 +106,18 @@ def test_titles_prefer_metadata_then_meaningful_filenames_then_first_heading():
     assert choose_title(None, "scan_0042.pdf", "Lease Agreement for Flat 4B\nThis lease...") == "Lease Agreement for Flat 4B"
     assert choose_title(None, "msa.pdf", "Master Services Agreement\n1. Parties") == "Master Services Agreement"
     assert choose_title(None, "doc1.pdf", "This first line is a sentence.") == "doc1"
+
+
+def test_two_column_pages_are_read_column_by_column():
+    import pymupdf
+
+    doc = pymupdf.open()
+    page = doc.new_page(width=595, height=842)
+    left = "\n".join(f"Left column sentence number {i} about the method." for i in range(12))
+    right = "\n".join(f"Right column sentence number {i} about the results." for i in range(12))
+    page.insert_textbox(pymupdf.Rect(40, 60, 280, 800), left, fontsize=9)
+    page.insert_textbox(pymupdf.Rect(315, 60, 555, 800), right, fontsize=9)
+    data = doc.tobytes()
+    text = parse(data, "paper.pdf", 10).pages[0].text
+    # all of the left column comes before any of the right column, instead of alternating line by line
+    assert text.index("Left column sentence number 11") < text.index("Right column sentence number 0")

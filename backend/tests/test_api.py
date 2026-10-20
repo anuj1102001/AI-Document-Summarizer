@@ -157,3 +157,19 @@ def test_errors_never_leak_internals(client):
     h = auth(client)
     r = client.post("/api/ask", headers=h, json={"document_ids": [], "question": "x"})
     assert r.status_code == 422 and "error" in r.json() and "Traceback" not in r.text
+
+
+def test_offline_demo_mode_produces_grounded_results_and_says_what_it_is(make_client, settings):
+    from app.llm.offline import OfflineDemoLLM
+
+    c = make_client(OfflineDemoLLM())
+    h = auth(c)
+    doc = upload(c, h, make_pdf(CONTRACT))
+    assert c.get("/api/health").json()["model"] == "offline-demo"
+    summary = c.post(f"/api/documents/{doc['id']}/summary", headers=h).json()["result"]
+    assert summary["grounding"]["grounded_rate"] == 1.0
+    answer = c.post("/api/ask", headers=h, json={"document_ids": [doc["id"]], "question": "What is the monthly fee?"}).json()["result"]
+    assert "4,000" in answer["answer"][0]["text"]
+    facts = c.post(f"/api/documents/{doc['id']}/extract", headers=h).json()["result"]
+    assert any(f["label"] == "$4,000" for f in facts["figures"])
+    assert all(f["support"] == "verified" for f in facts["figures"])

@@ -79,7 +79,10 @@ def to_markdown(meta: dict, results: dict) -> str:
         "MRR is the mean reciprocal rank of the first correct passage (0 if not in the top 6).",
         "",
     ]
-    for scope, title in (("document", "Scoped to the question's document (how Ask works)"), ("library", "Across the whole library (four documents compete)")):
+    for scope, title in (
+        ("document", "Scoped to the question's document (how Ask works)"),
+        ("library", "Across the whole library (four documents compete)"),
+    ):
         rows = results[scope]
         cols = ["hit@1", "hit@3", "hit@6", "mrr@6", "exact_hit@3", "paraphrase_hit@3", "p50_ms"]
         lines += [f"## {title}", "", "| Mode | " + " | ".join(cols) + " |", "|---" * (len(cols) + 1) + "|"]

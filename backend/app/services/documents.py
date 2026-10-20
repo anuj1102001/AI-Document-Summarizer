@@ -26,6 +26,23 @@ def safe_title(filename: str) -> str:
     return (base or "Untitled document")[:120]
 
 
+_GENERIC_NAME = re.compile(r"^(scan|document|doc|file|untitled|download|upload|image|img|print|copy|new)?[\s_\-]*\d*$|^.{0,4}$", re.I)
+
+
+def choose_title(metadata_title: str | None, filename: str, first_page: str) -> str:
+    """Prefer the PDF's own title; then the filename, unless it says nothing ("scan_0042", "doc1", "msa");
+    then the document's first line, when it looks like a heading."""
+    if metadata_title and len(metadata_title.strip()) > 3 and not _GENERIC_NAME.match(metadata_title.strip()):
+        return metadata_title.strip()[:120]
+    from_name = safe_title(filename)
+    if not _GENERIC_NAME.match(from_name):
+        return from_name
+    first_line = next((ln.strip() for ln in first_page.split("\n") if ln.strip()), "")
+    if 8 <= len(first_line) <= 120 and not first_line.endswith((".", ",", ";")):
+        return first_line
+    return from_name
+
+
 def display_filename(filename: str) -> str:
     """The name shown in the UI: last path segment only, no control characters."""
     name = re.split(r"[\\/]", filename or "")[-1]
@@ -45,7 +62,7 @@ def create_document(db: Database, settings: Settings, ws_id: str, filename: str,
 
     parsed = parse(data, filename, settings.max_pages)
     doc_id = new_id()
-    title = (parsed.title or "").strip() if parsed.title and len(parsed.title.strip()) > 3 else safe_title(filename)
+    title = choose_title(parsed.title, filename, parsed.pages[0].text if parsed.pages else "")
     settings.files_dir.mkdir(parents=True, exist_ok=True)
     (settings.files_dir / f"{doc_id}{_EXT[parsed.kind]}").write_bytes(data)
     with db.tx() as c:

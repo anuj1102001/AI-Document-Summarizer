@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     # LLM (generation only; retrieval runs locally and never needs a key)
+    # "gemini" in production. "offline-demo" copies sentences from the document instead of calling a model: it is
+    # for running the UI locally without a key and is labelled as not-AI everywhere it appears.
+    llm_provider: str = "gemini"
     gemini_api_key: str | None = Field(default=None, repr=False)
     gemini_model: str = "gemini-3.5-flash"
     llm_timeout_s: float = 90.0

@@ -56,7 +56,9 @@ def main() -> None:
                     "id": q["id"],
                     "type": q["type"],
                     "status": res["status"],
-                    "correct": all(f.lower() in text for f in q["answer_contains"]) if q["answer_contains"] else res["status"] == "not_found",
+                    "correct": all(f.lower() in text for f in q["answer_contains"])
+                    if q["answer_contains"]
+                    else res["status"] == "not_found",
                     "claims": res["grounding"].get("claims", 0),
                     "grounded": (res["grounding"].get("verified", 0) + res["grounding"].get("approximate", 0)),
                     "stated_unverified": res["grounding"].get("stated_unverified", 0),
@@ -86,7 +88,14 @@ def main() -> None:
     }
     RESULTS.mkdir(exist_ok=True)
     (RESULTS / "generation.json").write_text(json.dumps({"summary": summary, "rows": rows}, indent=2), encoding="utf-8")
-    md = ["# Answer evaluation", "", f"Run on {summary['date']} with `{summary['model']}` over {summary['questions']} questions.", "", "| Metric | Value |", "|---|---|"]
+    md = [
+        "# Answer evaluation",
+        "",
+        f"Run on {summary['date']} with `{summary['model']}` over {summary['questions']} questions.",
+        "",
+        "| Metric | Value |",
+        "|---|---|",
+    ]
     md += [f"| {k.replace('_', ' ')} | {v} |" for k, v in summary.items() if k not in ("date", "model", "questions")]
     md += ["", "Misses:", ""] + [f"- `{r['id']}` ({r['status']}): {r['answer'] or '(no answer)'}" for r in rows if not r["correct"]]
     (RESULTS / "generation.md").write_text("\n".join(md) + "\n", encoding="utf-8")

@@ -96,3 +96,13 @@ def test_chunks_keep_pages_headings_and_size():
 def test_single_short_document_is_one_chunk():
     chunks = chunk_pages([Page(1, "A short note about the meeting on Friday.")])
     assert len(chunks) == 1 and chunks[0].page_start == 1
+
+
+def test_titles_prefer_metadata_then_meaningful_filenames_then_first_heading():
+    from app.services.documents import choose_title
+
+    assert choose_title("Annual Report 2025", "x.pdf", "") == "Annual Report 2025"
+    assert choose_title(None, "Q3_board-pack.pdf", "Cover") == "Q3 board pack"
+    assert choose_title(None, "scan_0042.pdf", "Lease Agreement for Flat 4B\nThis lease...") == "Lease Agreement for Flat 4B"
+    assert choose_title(None, "msa.pdf", "Master Services Agreement\n1. Parties") == "Master Services Agreement"
+    assert choose_title(None, "doc1.pdf", "This first line is a sentence.") == "doc1"

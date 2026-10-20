@@ -1,6 +1,6 @@
 {
   "meta": {
-    "date": "2026-10-20",
+    "date": "2026-10-21",
     "embedder": "hashing-512",
     "chunk_chars": 1100,
     "overlap": 160,
@@ -20,7 +20,7 @@
         "mrr@6": 0.728,
         "exact_hit@3": 0.8,
         "paraphrase_hit@3": 0.812,
-        "p50_ms": 0.03
+        "p50_ms": 0.04
       },
       "sparse": {
         "hit@1": 0.681,
@@ -29,7 +29,7 @@
         "mrr@6": 0.787,
         "exact_hit@3": 1.0,
         "paraphrase_hit@3": 0.812,
-        "p50_ms": 0.34
+        "p50_ms": 0.39
       },
       "hybrid": {
         "hit@1": 0.617,
@@ -38,7 +38,7 @@
         "mrr@6": 0.768,
         "exact_hit@3": 1.0,
         "paraphrase_hit@3": 0.844,
-        "p50_ms": 0.4
+        "p50_ms": 0.43
       }
     },
     "library": {
@@ -58,7 +58,7 @@
         "mrr@6": 0.695,
         "exact_hit@3": 0.867,
         "paraphrase_hit@3": 0.688,
-        "p50_ms": 1.17
+        "p50_ms": 1.16
       },
       "hybrid": {
         "hit@1": 0.489,
@@ -67,7 +67,7 @@
         "mrr@6": 0.632,
         "exact_hit@3": 0.8,
         "paraphrase_hit@3": 0.688,
-        "p50_ms": 1.26
+        "p50_ms": 1.32
       }
     },
     "ablation": {
@@ -78,7 +78,7 @@
         "mrr@6": 0.632,
         "exact_hit@3": 0.8,
         "paraphrase_hit@3": 0.688,
-        "p50_ms": 1.23
+        "p50_ms": 1.32
       },
       "hybrid (sparse weight 0.5)": {
         "hit@1": 0.511,
@@ -87,7 +87,7 @@
         "mrr@6": 0.632,
         "exact_hit@3": 0.8,
         "paraphrase_hit@3": 0.688,
-        "p50_ms": 1.24
+        "p50_ms": 1.3
       },
       "hybrid (sparse weight 0.3)": {
         "hit@1": 0.489,
@@ -96,7 +96,7 @@
         "mrr@6": 0.619,
         "exact_hit@3": 0.8,
         "paraphrase_hit@3": 0.719,
-        "p50_ms": 1.24
+        "p50_ms": 1.26
       }
     }
   }

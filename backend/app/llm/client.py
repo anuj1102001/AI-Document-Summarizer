@@ -135,6 +135,10 @@ class FakeLLM:
 
 
 def build_llm(settings: Settings) -> LLM:
+    if settings.llm_provider == "offline-demo":
+        from app.llm.offline import OfflineDemoLLM
+
+        return OfflineDemoLLM()
     if not settings.gemini_api_key:
         return NotConfiguredLLM()
     return GeminiLLM(settings.gemini_api_key, settings.gemini_model, settings.llm_timeout_s, settings.llm_max_retries)

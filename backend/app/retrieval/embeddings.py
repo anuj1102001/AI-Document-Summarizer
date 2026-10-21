@@ -6,6 +6,7 @@ Tests and offline demos use a deterministic hashing embedder so they run in mill
 
 import hashlib
 import re
+import threading
 from typing import Protocol
 
 import numpy as np
@@ -28,21 +29,30 @@ def _normalize(m: np.ndarray) -> np.ndarray:
 
 
 class FastEmbedder:
+    """Tuned for a 512 MB container: one ONNX thread, small batches, one embedding job at a time.
+
+    Measured indexing two documents at once: ONNX defaults (a thread per visible core, batches of 64) peaked at 1.1 GB;
+    one thread with batches of 4 peaked at about 275 MB and was no slower on short chunks.
+    """
+
     def __init__(self, model_name: str):
         from fastembed import TextEmbedding
 
         self.name = model_name
-        self._model = TextEmbedding(model_name)
+        self._model = TextEmbedding(model_name, threads=1)
+        self._lock = threading.Lock()
         self.dim = len(next(iter(self._model.embed(["dimension probe"]))))
         self._query_prefix = BGE_QUERY_PREFIX if "bge" in model_name.lower() else ""
 
     def embed_passages(self, texts: list[str]) -> np.ndarray:
         if not texts:
             return np.zeros((0, self.dim), dtype=np.float32)
-        return _normalize(np.array(list(self._model.embed(texts, batch_size=64))))
+        with self._lock:
+            return _normalize(np.array(list(self._model.embed(texts, batch_size=4))))
 
     def embed_query(self, text: str) -> np.ndarray:
-        return _normalize(np.array(list(self._model.embed([self._query_prefix + text]))[0]))
+        with self._lock:
+            return _normalize(np.array(list(self._model.embed([self._query_prefix + text]))[0]))
 
 
 _TOKEN = re.compile(r"[a-z0-9]+")

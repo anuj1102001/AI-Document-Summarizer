@@ -7,9 +7,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     HF_HOME=/home/app/.cache \
     FASTEMBED_CACHE_PATH=/home/app/.cache/fastembed \
     DATA_DIR=/home/app/data \
+    OMP_NUM_THREADS=1 \
+    MALLOC_ARENA_MAX=2 \
     PORT=7860
 
-# Spaces run containers as uid 1000.
+# Run as an unprivileged user (uid 1000).
 RUN useradd --create-home --uid 1000 app
 WORKDIR /home/app/api
 

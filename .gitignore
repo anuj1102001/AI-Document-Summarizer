@@ -29,3 +29,5 @@ desktop.ini
 .vscode/
 
 backend/evals/results/*.progress.*.jsonl
+
+.vercel

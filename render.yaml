@@ -1,12 +1,12 @@
 # Render Blueprint: the Margin API as a free Docker web service.
 # Dashboard -> New -> Blueprint -> pick this repo. Render asks for the two secret values below.
+# Services deploy from the branch the Blueprint tracks (set it in the Blueprint settings, e.g. main).
 services:
   - type: web
     name: margin-api
     runtime: docker
     plan: free
     region: singapore
-    branch: v2
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     healthCheckPath: /api/health

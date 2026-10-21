@@ -4,7 +4,7 @@ Upload a contract, paper, policy or report. Margin summarises it, answers questi
 
 > This repository was the *AI Document Summarizer* (v1: one FastAPI endpoint that sent a PDF's text to Gemini). Version 2 is a rebuild; see [what changed](#what-changed-from-v1).
 
-**Live demo:** _coming soon (being deployed)_ · **Case study:** `/case-study` in the app · **Status:** working prototype; answer-quality evals pending an API key
+**Live demo:** _coming soon (being deployed)_ · **Case study:** `/case-study` in the app · **Status:** working prototype; retrieval and answer-quality evals run
 
 ## What it does
 
@@ -56,7 +56,19 @@ Retrieval (no API key; runs in CI): 4 synthetic documents (15 pages, 47 chunks) 
 
 On this set dense search alone is as good as or better than hybrid except at hit@6; hybrid is kept for identifier-heavy queries the set covers thinly. The set is small and was written by the same person who built the pipeline, so treat it as a regression suite. Full results, the library-wide table and an ablation: [`backend/evals/results/retrieval.md`](backend/evals/results/retrieval.md).
 
-Answer quality (`backend/evals/run_generation.py`: accuracy, correct refusals on 7 unanswerable questions, verified-claim rate, latency, tokens) **has not been run yet**; it needs a Gemini key.
+Answer quality (`backend/evals/run_generation.py`, the real Ask pipeline end to end), run on 2026-10-21 with `gemini-3.5-flash-lite` over the same documents:
+
+| Metric | Value |
+|---|---|
+| Answers containing every expected fact | 0.979 (46/47) |
+| Unanswerable questions correctly refused | 0.857 (6/7) |
+| Answerable questions wrongly refused | 0.0 |
+| Claims whose quote verified in the source | 1.0 |
+| Claims labelled "stated" that didn't verify | 0 |
+| Latency p50 / p95 | 1.9 s / 14.5 s (free tier) |
+| Tokens per question (mean) | 1,014 |
+
+The one wrong answer inferred "at least twelve months" from a termination clause instead of the stated 24-month term; the failed refusal answered a sales question with the (true, cited) fact that the person sent apologies. Strict string matching against facts written by the builder, on a small synthetic set: evidence that grounding holds, not a benchmark. Details: [`backend/evals/results/generation.md`](backend/evals/results/generation.md).
 
 ## Run it locally
 
@@ -116,7 +128,7 @@ v1 had a UTF-16 `requirements.txt` pip couldn't read, imported PyMuPDF without l
 
 - No OCR yet: scanned PDFs are detected and explained, not read.
 - Anonymous workspaces: no accounts, sharing or recovery.
-- Evaluation data is synthetic and small; answer-quality evals are pending a key; no usability testing yet (a study plan is in the case study).
+- Evaluation data is synthetic and small; no usability testing yet (a study plan is in the case study).
 
 ## Skills this project demonstrates
 

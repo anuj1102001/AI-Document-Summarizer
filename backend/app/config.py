@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     # for running the UI locally without a key and is labelled as not-AI everywhere it appears.
     llm_provider: str = "gemini"
     gemini_api_key: str | None = Field(default=None, repr=False)
-    gemini_model: str = "gemini-3.5-flash"
+    gemini_model: str = "gemini-3.5-flash-lite"  # free tier caps gemini-3.5-flash at 20 requests a day
     llm_timeout_s: float = 90.0
     llm_max_retries: int = 2
 

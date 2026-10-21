@@ -66,7 +66,7 @@ export default function CaseStudy() {
           ["Role", "Product, design and engineering"],
           ["Stack", "Python, FastAPI, Gemini, Next.js"],
           ["Retrieval", "bge-small + BM25 + RRF"],
-          ["Status", "Working prototype; AI evals pending a key"],
+          ["Status", "Working prototype; retrieval and answer evals run"],
         ].map(([k, v]) => (
           <div key={k}>
             <dt className="eyebrow">{k}</dt>
@@ -197,7 +197,27 @@ export default function CaseStudy() {
         <p>
           <strong>Answer quality</strong> is measured by a second script (<code className="font-mono text-sm">evals/run_generation.py</code>): accuracy against
           expected facts, correct refusals on 7 unanswerable questions, false refusals, the share of claims whose quotes verify, stated-but-unverified claims,
-          latency and tokens. <strong>It hasn&apos;t been run yet</strong>, because it needs a Gemini key; its results will be published as they come out.
+          latency and tokens. It runs the real Ask pipeline end to end. Run on 2026-10-21 with gemini-3.5-flash-lite over 54 questions:
+        </p>
+        <EvalTable
+          caption="Answer quality (47 answerable, 7 unanswerable questions)"
+          head={["Metric", "Value"]}
+          rows={[
+            ["Answers containing every expected fact", "0.979 (46/47)"],
+            ["Unanswerable questions correctly refused", "0.857 (6/7)"],
+            ["Answerable questions wrongly refused", "0.0"],
+            ["Claims whose quote verified in the source", "1.0"],
+            ["Claims labelled “stated” that didn’t verify", "0"],
+            ["Latency p50 / p95", "1.9 s / 14.5 s"],
+            ["Tokens per question (mean)", "1,014"],
+          ]}
+        />
+        <p>
+          The one wrong answer was a real error: asked how long the first contract period is, it inferred &ldquo;at least twelve months&rdquo; from a termination
+          clause and missed the stated 24 months, though it did mark the answer as partial. The failed refusal: asked what Neha Kulkarni reported about sales, it
+          said (correctly, with a verified quote) that she sent apologies, instead of saying the minutes don&apos;t cover it. Accuracy is a strict string match against facts the
+          builder wrote, on a small synthetic set, using the free tier, where a few responses took 10–15 seconds. Read it as evidence that grounding holds up, not
+          as a benchmark.
         </p>
       </Section>
 
@@ -274,14 +294,14 @@ function Callout({ children }: { children: React.ReactNode }) {
   return <p className="rounded-lg border-l-4 border-mark bg-sunk px-4 py-3 text-sm text-ink-2">{children}</p>;
 }
 
-function EvalTable({ caption, rows }: { caption: string; rows: string[][] }) {
+function EvalTable({ caption, rows, head = ["Mode", "hit@1", "hit@3", "hit@6", "MRR"] }: { caption: string; rows: string[][]; head?: string[] }) {
   return (
     <div className="overflow-x-auto rounded-card border border-line">
       <table className="w-full min-w-[420px] text-right text-sm">
         <caption className="bg-sunk px-3 py-2 text-left text-xs font-medium text-ink-2">{caption}</caption>
         <thead className="text-xs text-ink-3">
           <tr>
-            {["Mode", "hit@1", "hit@3", "hit@6", "MRR"].map((h, i) => (
+            {head.map((h, i) => (
               <th key={h} className={i ? "px-3 py-2 font-medium" : "px-3 py-2 text-left font-medium"}>
                 {h}
               </th>

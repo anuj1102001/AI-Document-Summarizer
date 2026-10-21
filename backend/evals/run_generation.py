@@ -22,6 +22,7 @@ from pathlib import Path
 
 from app.config import Settings
 from app.db import Database
+from app.errors import AppError
 from app.llm.client import build_llm
 from app.retrieval.embeddings import build_embedder
 from app.security import create_workspace
@@ -50,11 +51,30 @@ def main() -> None:
 
         # Free-tier keys allow ~5 requests a minute; pause between questions (EVAL_PAUSE_S=0 on a paid key).
         pause = float(os.environ.get("EVAL_PAUSE_S", "13"))
+        # Progress is saved per question, so a run stopped by a daily quota resumes where it left off.
+        RESULTS.mkdir(exist_ok=True)
+        progress = RESULTS / f"generation.progress.{s.gemini_model}.jsonl"
+        done = {}
+        if progress.exists():
+            for line in progress.read_text(encoding="utf-8").splitlines():
+                row = json.loads(line)
+                done[row["id"]] = row
+        questions = load_questions()
         rows = []
-        for n, q in enumerate(load_questions()):
-            if n:
+        calls = 0
+        for q in questions:
+            if q["id"] in done:
+                rows.append(done[q["id"]])
+                continue
+            if calls:
                 time.sleep(pause)
-            r = analysis.ask(db, s, llm, emb, ws, [ids[q["doc"]]], q["question"], [])
+            calls += 1
+            try:
+                r = analysis.ask(db, s, llm, emb, ws, [ids[q["doc"]]], q["question"], [])
+            except AppError as e:
+                if e.code != "AI_RATE_LIMITED":
+                    raise
+                sys.exit(f"Stopped by the provider's quota after {len(rows)}/{len(questions)} questions; run again later to resume.")
             res, meta = r["result"], r["meta"]
             text = answer_text(res).lower()
             rows.append(
@@ -73,6 +93,8 @@ def main() -> None:
                     "answer": answer_text(res)[:300],
                 }
             )
+            with progress.open("a", encoding="utf-8") as f:
+                f.write(json.dumps(rows[-1]) + "\n")
             print(f"{q['id']:8s} {res['status']:10s} {'OK ' if rows[-1]['correct'] else 'MISS'} {meta['latency_ms']}ms")
 
     answerable = [r for r in rows if r["type"] != "unanswerable"]

@@ -1,0 +1,54 @@
+{"id": "msa-01", "doc": "msa", "page": 2, "type": "paraphrase", "question": "How long does the customer have to pay a bill?", "answer_contains": ["30 days"]}
+{"id": "msa-02", "doc": "msa", "page": 2, "type": "exact", "question": "What interest rate applies to late payments?", "answer_contains": ["1.25%"]}
+{"id": "msa-03", "doc": "msa", "page": 2, "type": "paraphrase", "question": "Can the vendor raise its prices, and by how much at most?", "answer_contains": ["7%"]}
+{"id": "msa-04", "doc": "msa", "page": 2, "type": "paraphrase", "question": "What compensation does the customer get if the platform has too much downtime?", "answer_contains": ["5%"]}
+{"id": "msa-05", "doc": "msa", "page": 2, "type": "exact", "question": "What is the maximum service credit?", "answer_contains": ["25%"]}
+{"id": "msa-06", "doc": "msa", "page": 2, "type": "exact", "question": "How fast must Severity-1 incidents get a first response?", "answer_contains": ["1 hour"]}
+{"id": "msa-07", "doc": "msa", "page": 2, "type": "exact", "question": "How much does each store beyond 250 cost per month?", "answer_contains": ["900"]}
+{"id": "msa-08", "doc": "msa", "page": 3, "type": "paraphrase", "question": "Where will the client's information be physically kept?", "answer_contains": ["India"]}
+{"id": "msa-09", "doc": "msa", "page": 3, "type": "paraphrase", "question": "Is the provider allowed to use our sales data to improve models it sells to others?", "answer_contains": ["not"]}
+{"id": "msa-10", "doc": "msa", "page": 3, "type": "paraphrase", "question": "If there is a data breach, how quickly must we be told?", "answer_contains": ["48 hours"]}
+{"id": "msa-11", "doc": "msa", "page": 3, "type": "exact", "question": "Which ISO certification audit does the provider undergo?", "answer_contains": ["27001"]}
+{"id": "msa-12", "doc": "msa", "page": 3, "type": "paraphrase", "question": "How long do confidentiality duties last after the contract ends?", "answer_contains": ["three"]}
+{"id": "msa-13", "doc": "msa", "page": 4, "type": "paraphrase", "question": "How long is the first contract period?", "answer_contains": ["24"]}
+{"id": "msa-14", "doc": "msa", "page": 4, "type": "paraphrase", "question": "How much notice is needed to stop the contract from rolling over?", "answer_contains": ["90 days"]}
+{"id": "msa-15", "doc": "msa", "page": 4, "type": "paraphrase", "question": "What does it cost the customer to exit early without a breach?", "answer_contains": ["two months"]}
+{"id": "msa-16", "doc": "msa", "page": 4, "type": "paraphrase", "question": "What is the most either side can be made to pay in damages?", "answer_contains": ["twelve"]}
+{"id": "msa-17", "doc": "msa", "page": 5, "type": "exact", "question": "Under which Act would arbitration take place?", "answer_contains": ["1996"]}
+{"id": "msa-18", "doc": "msa", "page": 5, "type": "exact", "question": "Who signed for Halcyon Retail?", "answer_contains": ["Arjun Malhotra"]}
+{"id": "msa-19", "doc": "msa", "page": 1, "type": "exact", "question": "When are forecasts refreshed each week?", "answer_contains": ["06:00"]}
+{"id": "msa-20", "doc": "msa", "page": null, "type": "unanswerable", "question": "What penalty applies if the customer shares login credentials?", "answer_contains": []}
+{"id": "res-01", "doc": "research", "page": 1, "type": "paraphrase", "question": "How many people took part in the study?", "answer_contains": ["412"]}
+{"id": "res-02", "doc": "research", "page": 3, "type": "paraphrase", "question": "Did letting teams choose their own office days change how much code they shipped?", "answer_contains": ["0.6%"]}
+{"id": "res-03", "doc": "research", "page": 3, "type": "exact", "question": "What was the 95% confidence interval for fixed-day teams' output change?", "answer_contains": ["1.2%", "7.0%"]}
+{"id": "res-04", "doc": "research", "page": 3, "type": "paraphrase", "question": "How much faster did code reviews happen with shared office days?", "answer_contains": ["18%"]}
+{"id": "res-05", "doc": "research", "page": 3, "type": "paraphrase", "question": "What happened to people quitting after the change?", "answer_contains": ["9.6%"]}
+{"id": "res-06", "doc": "research", "page": 3, "type": "paraphrase", "question": "Why did people leave before hybrid work was introduced?", "answer_contains": ["commute"]}
+{"id": "res-07", "doc": "research", "page": 2, "type": "exact", "question": "What statistical design did the authors use?", "answer_contains": ["difference-in-differences"]}
+{"id": "res-08", "doc": "research", "page": 2, "type": "exact", "question": "What was the survey response rate?", "answer_contains": ["83%"]}
+{"id": "res-09", "doc": "research", "page": 4, "type": "paraphrase", "question": "What are the weaknesses of this research?", "answer_contains": ["three firms"]}
+{"id": "res-10", "doc": "research", "page": 4, "type": "paraphrase", "question": "What do the authors advise companies to do?", "answer_contains": ["two shared office days"]}
+{"id": "res-11", "doc": "research", "page": 3, "type": "paraphrase", "question": "How did deep-work time change on days at home?", "answer_contains": ["52 minutes"]}
+{"id": "res-12", "doc": "research", "page": 4, "type": "exact", "question": "Which firm had a hiring freeze?", "answer_contains": ["Firm B"]}
+{"id": "res-13", "doc": "research", "page": null, "type": "unanswerable", "question": "How much did the firms save on office rent?", "answer_contains": []}
+{"id": "res-14", "doc": "research", "page": null, "type": "unanswerable", "question": "What programming languages did the engineers use?", "answer_contains": []}
+{"id": "pol-01", "doc": "policy", "page": 1, "type": "paraphrase", "question": "How many vacation days do I get each year?", "answer_contains": ["22"]}
+{"id": "pol-02", "doc": "policy", "page": 1, "type": "paraphrase", "question": "Can I keep unused holidays for next year?", "answer_contains": ["10"]}
+{"id": "pol-03", "doc": "policy", "page": 1, "type": "paraphrase", "question": "When do I need a doctor's note?", "answer_contains": ["2"]}
+{"id": "pol-04", "doc": "policy", "page": 2, "type": "paraphrase", "question": "How much paid time off does a father get when a baby is born?", "answer_contains": ["6 weeks"]}
+{"id": "pol-05", "doc": "policy", "page": 2, "type": "paraphrase", "question": "What is the nightly hotel limit in Bengaluru?", "answer_contains": ["9,000"]}
+{"id": "pol-06", "doc": "policy", "page": 2, "type": "exact", "question": "When is premium economy allowed?", "answer_contains": ["6 hours"]}
+{"id": "pol-07", "doc": "policy", "page": 3, "type": "paraphrase", "question": "How much do I get per day for food when I stay overnight on a work trip?", "answer_contains": ["2,500"]}
+{"id": "pol-08", "doc": "policy", "page": 3, "type": "paraphrase", "question": "What's the deadline for filing expense claims?", "answer_contains": ["30 days"]}
+{"id": "pol-09", "doc": "policy", "page": 3, "type": "paraphrase", "question": "How much can a new hire spend on a desk and chair?", "answer_contains": ["25,000"]}
+{"id": "pol-10", "doc": "policy", "page": null, "type": "unanswerable", "question": "Is there a policy on working from another country?", "answer_contains": []}
+{"id": "min-01", "doc": "minutes", "page": 1, "type": "paraphrase", "question": "Why was online check-in released late?", "answer_contains": ["API"]}
+{"id": "min-02", "doc": "minutes", "page": 2, "type": "paraphrase", "question": "What was the biggest source of customer complaints?", "answer_contains": ["double-booking"]}
+{"id": "min-03", "doc": "minutes", "page": 2, "type": "paraphrase", "question": "Was the price increase approved?", "answer_contains": ["rejected"]}
+{"id": "min-04", "doc": "minutes", "page": 3, "type": "paraphrase", "question": "How much revenue is at risk if the big clinics leave?", "answer_contains": ["1.1 crore"]}
+{"id": "min-05", "doc": "minutes", "page": 3, "type": "exact", "question": "What is Daniel Thomas responsible for and by when?", "answer_contains": ["21 August"]}
+{"id": "min-06", "doc": "minutes", "page": 2, "type": "paraphrase", "question": "How much money was approved for another verification vendor?", "answer_contains": ["18 lakh"]}
+{"id": "min-07", "doc": "minutes", "page": 3, "type": "exact", "question": "When is the next steering committee meeting?", "answer_contains": ["11 September"]}
+{"id": "min-08", "doc": "minutes", "page": null, "type": "unanswerable", "question": "What did Neha Kulkarni report about sales?", "answer_contains": []}
+{"id": "min-09", "doc": "minutes", "page": null, "type": "unanswerable", "question": "What is the new subscription price?", "answer_contains": []}
+{"id": "pol-11", "doc": "policy", "page": null, "type": "unanswerable", "question": "How many days of bereavement leave are there?", "answer_contains": []}

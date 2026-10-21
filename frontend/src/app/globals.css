@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: 250 249 246;
+  --surface: 255 255 255;
+  --sunk: 243 241 236;
+  --line: 228 225 218;
+  --ink: 22 24 29;
+  --ink-2: 70 74 84;
+  --ink-3: 106 110 120;
+  --accent: 27 58 107;
+  --accent-soft: 232 237 246;
+  --accent-ink: 255 255 255;
+  --mark: 255 214 102;
+  --ok: 21 112 66;
+  --ok-soft: 229 243 235;
+  --warn: 150 90 0;
+  --warn-soft: 252 242 222;
+  --bad: 176 36 26;
+  --bad-soft: 252 233 231;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --paper: 17 18 21;
+    --surface: 24 26 30;
+    --sunk: 31 33 38;
+    --line: 46 49 56;
+    --ink: 236 236 232;
+    --ink-2: 190 192 196;
+    --ink-3: 150 153 160;
+    --accent: 150 178 232;
+    --accent-soft: 33 44 66;
+    --accent-ink: 14 19 30;
+    --mark: 150 118 36;
+    --ok: 120 205 155;
+    --ok-soft: 24 48 36;
+    --warn: 232 185 95;
+    --warn-soft: 56 44 20;
+    --bad: 242 138 128;
+    --bad-soft: 62 29 27;
+    color-scheme: dark;
+  }
+}
+
+html,
+body {
+  background: rgb(var(--paper));
+  color: rgb(var(--ink));
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: rgb(var(--mark) / 0.6);
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+  .btn {
+    @apply inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-accent-ink hover:bg-accent/90;
+  }
+  .btn-secondary {
+    @apply btn border border-line bg-surface text-ink hover:bg-sunk;
+  }
+  .btn-ghost {
+    @apply btn text-ink-2 hover:bg-sunk hover:text-ink;
+  }
+  .input {
+    @apply h-10 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink placeholder:text-ink-3 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20;
+  }
+  .eyebrow {
+    @apply font-mono text-2xs uppercase tracking-[0.08em] text-ink-3;
+  }
+  .reading {
+    @apply font-serif text-[16px] leading-[1.65] text-ink;
+  }
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-sunk;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface/70 to-transparent;
+    animation: shimmer 1.4s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

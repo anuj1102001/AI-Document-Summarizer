@@ -1,21 +1,33 @@
-# Virtual Environment
+# Python
 .venv/
-
-# Environment Variables
-.env
-
-# Python Cache
 __pycache__/
 *.pyc
+.pytest_cache/
+.ruff_cache/
 
-# Uploaded PDFs
-app/uploads/
+# Secrets
+.env
+.env.local
 
-# Windows
+# Runtime data (uploads, database)
+backend/data/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+*.tsbuildinfo
+
+# Personal documents: never commit real PDFs
+*.pdf
+!frontend/public/samples/*.pdf
+
+# OS / editors
 desktop.ini
-
-# VS Code
+.DS_Store
 .vscode/
 
-# Ignore all PDFs
-*.pdf
+backend/evals/results/*.progress.*.jsonl
+
+.vercel

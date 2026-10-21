@@ -15,10 +15,29 @@ const NAV = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  const [health, setHealth] = useState<Health | null | "down">(null);
+  const [health, setHealth] = useState<Health | null | "waking" | "down">(null);
 
   useEffect(() => {
-    api.health().then(setHealth, () => setHealth("down"));
+    // The free host sleeps when idle; the first request can take up to a minute while it starts.
+    let cancelled = false;
+    const started = Date.now();
+    const slow = setTimeout(() => !cancelled && setHealth((h) => h ?? "waking"), 3000);
+    const check = () =>
+      api.health().then(
+        (h) => !cancelled && setHealth(h),
+        () => {
+          if (cancelled) return;
+          if (Date.now() - started < 90_000) {
+            setHealth("waking");
+            setTimeout(check, 5000);
+          } else setHealth("down");
+        },
+      );
+    check();
+    return () => {
+      cancelled = true;
+      clearTimeout(slow);
+    };
   }, []);
 
   return (
@@ -48,17 +67,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      {health === "down" && (
-        <div role="status" className="border-b border-warn/30 bg-warn-soft px-4 py-2 text-center text-sm text-warn">
-          The Margin server isn&apos;t responding. On the free demo host it can take about 30 seconds to wake up; this page will work once it does.
+      {health === "waking" && (
+        <div role="status" className="border-b border-line bg-sunk px-4 py-2 text-center text-sm text-ink-2">
+          Waking the Margin server. The free demo host sleeps when nobody is using it, so the first visit takes up to a minute.
         </div>
       )}
-      {health && health !== "down" && health.model === "offline-demo" && (
+      {health === "down" && (
+        <div role="status" className="border-b border-warn/30 bg-warn-soft px-4 py-2 text-center text-sm text-warn">
+          The Margin server isn&apos;t responding. Please try again in a few minutes.
+        </div>
+      )}
+      {health && health !== "down" && health !== "waking" && health.model === "offline-demo" && (
         <div role="status" className="border-b border-warn/30 bg-warn-soft px-4 py-2 text-center text-sm text-warn">
           Offline demo mode: results below are sentences copied from your document by a simple rule, not AI. Connect a Gemini key for real summaries and answers.
         </div>
       )}
-      {health && health !== "down" && !health.ai_configured && (
+      {health && health !== "down" && health !== "waking" && !health.ai_configured && (
         <div role="status" className="border-b border-line bg-sunk px-4 py-2 text-center text-sm text-ink-2">
           AI is switched off on this server, so summaries and answers are unavailable. Uploading, reading and search still work.
         </div>
@@ -70,8 +94,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AiStatus({ health }: { health: Health | null | "down" }) {
-  if (!health || health === "down") return null;
+function AiStatus({ health }: { health: Health | null | "waking" | "down" }) {
+  if (!health || health === "waking" || health === "down") return null;
   return (
     <span className="hidden items-center gap-2 font-mono text-2xs text-ink-3 sm:inline-flex" title={`Answers by ${health.model ?? "—"}; search by ${health.embedding_model}`}>
       <span className={clsx("h-1.5 w-1.5 rounded-full", health.ai_configured ? "bg-ok" : "bg-ink-3")} />

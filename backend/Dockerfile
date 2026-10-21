@@ -1,4 +1,4 @@
-# Margin API. Runs on Hugging Face Spaces (Docker SDK, port 7860) or any container host.
+# Margin API. Runs on Render (free Docker web service; Render sets PORT) or any container host.
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -24,5 +24,5 @@ COPY --chown=app:app app ./app
 RUN mkdir -p /home/app/data
 
 EXPOSE 7860
-HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7860/api/health')"
+HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import os, urllib.request; urllib.request.urlopen(f'http://127.0.0.1:{os.environ.get(\"PORT\", \"7860\")}/api/health')"
 CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]

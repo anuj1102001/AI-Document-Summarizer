@@ -12,9 +12,11 @@ Run from backend/:  python -m evals.run_generation
 """
 
 import json
+import os
 import statistics
 import sys
 import tempfile
+import time
 from datetime import date
 from pathlib import Path
 
@@ -36,7 +38,7 @@ def main() -> None:
     base = Settings()
     if not base.gemini_api_key:
         sys.exit("GEMINI_API_KEY is not set. Add it to backend/.env (never commit it) and run again.")
-    with tempfile.TemporaryDirectory() as tmp:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:  # SQLite keeps the file open on Windows
         s = Settings(data_dir=Path(tmp), gemini_api_key=base.gemini_api_key, gemini_model=base.gemini_model)
         db, llm, emb = Database(s.db_path), build_llm(s), build_embedder(s.embedding_backend, s.embedding_model)
         ws, _ = create_workspace(db)
@@ -46,8 +48,12 @@ def main() -> None:
             index_document(db, s, emb, doc["id"])
             ids[md.stem] = doc["id"]
 
+        # Free-tier keys allow ~5 requests a minute; pause between questions (EVAL_PAUSE_S=0 on a paid key).
+        pause = float(os.environ.get("EVAL_PAUSE_S", "13"))
         rows = []
-        for q in load_questions():
+        for n, q in enumerate(load_questions()):
+            if n:
+                time.sleep(pause)
             r = analysis.ask(db, s, llm, emb, ws, [ids[q["doc"]]], q["question"], [])
             res, meta = r["result"], r["meta"]
             text = answer_text(res).lower()

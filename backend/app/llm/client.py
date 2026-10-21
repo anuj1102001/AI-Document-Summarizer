@@ -5,6 +5,7 @@ transient failures with backoff, and maps provider errors to user-safe messages.
 can be exercised without a key or network.
 """
 
+import re
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -35,6 +36,12 @@ class LLM(Protocol):
     def generate(
         self, *, system: str, prompt: str, schema: type[T], temperature: float = 0.1, max_output_tokens: int = 4096
     ) -> tuple[T, Usage]: ...
+
+
+def _retry_after(err: Exception) -> float | None:
+    """Seconds the provider asked us to wait on a 429, if it said."""
+    m = re.search(r"retry in ([\d.]+)s", str(err)) or re.search(r"'retryDelay': '(\d+)s'", str(err))
+    return float(m.group(1)) + 1 if m else None
 
 
 class NotConfiguredLLM:
@@ -97,7 +104,8 @@ class GeminiLLM:
             except gerr.ClientError as e:
                 if e.code == 429 and attempt < self._max_retries:
                     attempt += 1
-                    time.sleep(2**attempt)
+                    # Free-tier quotas are per minute and Google says how long to wait ("Please retry in 42.8s").
+                    time.sleep(min(_retry_after(e) or 2**attempt, 60))
                     continue
                 if e.code in (401, 403):
                     raise AppError(
@@ -111,7 +119,7 @@ class GeminiLLM:
             except gerr.ServerError:
                 if attempt < self._max_retries:
                     attempt += 1
-                    time.sleep(2**attempt)
+                    time.sleep(5 * attempt)  # 503s are usually "model overloaded"; give it a moment
                     continue
                 raise AppError("The AI provider is having problems. Please try again shortly.", 502, "AI_UNAVAILABLE") from None
 

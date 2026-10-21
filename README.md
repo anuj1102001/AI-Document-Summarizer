@@ -4,7 +4,11 @@ Upload a contract, paper, policy or report. Margin summarises it, answers questi
 
 > This repository was the *AI Document Summarizer* (v1: one FastAPI endpoint that sent a PDF's text to Gemini). Version 2 is a rebuild; see [what changed](#what-changed-from-v1).
 
-**Live demo:** _coming soon (being deployed)_ · **Case study:** `/case-study` in the app · **Status:** working prototype; retrieval and answer-quality evals run
+**Live demo:** [margin-docs.vercel.app](https://margin-docs.vercel.app) (free hosting: the first visit can take up to a minute to wake the server) · **Case study:** [margin-docs.vercel.app/case-study](https://margin-docs.vercel.app/case-study) · **Status:** working prototype; retrieval and answer-quality evals run
+
+![Summary with a citation highlighted on the page](docs/screenshots/margin-summary-citation.png)
+
+*Real output from the live demo (gemini-3.5-flash-lite). Note the amber banner: 27 of 28 claims verified, and the one it couldn't find in the document is flagged in red rather than hidden.*
 
 ## What it does
 
@@ -17,6 +21,12 @@ Upload a contract, paper, policy or report. Margin summarises it, answers questi
 | **Library** | Private workspace, search across every document, past analyses kept |
 
 Every AI claim is labelled **stated** (the document says it) or **interpretation**, and each quote is checked: **verified** (found word for word), **approximate**, or **not found**.
+
+| Ask, with the answer's source highlighted | Key facts, each with its page |
+|---|---|
+| ![Ask](docs/screenshots/margin-ask.png) | ![Key facts](docs/screenshots/margin-key-facts.png) |
+| **Dark theme** | **Phone** |
+| ![Dark theme](docs/screenshots/margin-dark.png) | ![Phone](docs/screenshots/margin-mobile.png) |
 
 ## Architecture
 

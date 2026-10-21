@@ -257,7 +257,7 @@ export default function CaseStudy() {
           <Link href="/" className="underline underline-offset-2">
             library
           </Link>
-          . Screenshots of real AI output will be added once the live demo runs with a Gemini key.
+          . The live demo runs gemini-3.5-flash-lite on free hosting, so the first visit after a quiet spell takes up to a minute to wake the server.
         </p>
       </Section>
 
